@@ -1,1 +1,2 @@
-# csharp-api-requests-responses-workshop
+# C# API Request Responses & Open API
+
