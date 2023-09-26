@@ -4,11 +4,10 @@ namespace workshop.wwwapi.Models
 {
     public class Pet
     {
-        public int Id { get; set; }
-              
+        public int Id { get; set; }              
         public string Name { get; set; }
         public string Description { get; set; }
         public int Age { get; set; }
-        public DateTime? IsDeleted { get; set; }
+        
     }
 }

@@ -66,21 +66,23 @@ namespace workshop.wwwapi.Controllers
 
         //TODO: work in progress....
         //httpput
-        //[HttpPut]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //public async Task<IResult> Update(int id, Pet pet)
-        //{
-        //    //get item to update
-        //    var item = _pets.Where(x => x.Id == id).FirstOrDefault();
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Route("{id}")]
+        public async Task<IResult> Update(int id, Pet pet)
+        {
+            //get item to update
+            var item = _pets.Where(x => x.Id == id).FirstOrDefault();
+            
+            if (item == null) return Results.NotFound();
 
-        //    item.Description = pet.Description!=string.Empty ? pet.Description : item.Description;
-        //    item.Age = pet.Age;
-        //    item.Name = pet.Name;
-
-        //    //update
-        //    //return
-        //    return Results.Ok(item);
-        //}
+            item.Name           = string.IsNullOrEmpty(pet.Name) ? item.Name : pet.Name;
+            item.Description    = string.IsNullOrEmpty(pet.Description)? item.Description : pet.Description;
+            item.Age            = pet.Age == 0 ? item.Age : pet.Age;
+                        
+            return Results.Ok(item);
+        }
 
     }
 }
