@@ -5,9 +5,9 @@ namespace workshop.wwwapi.Repository
 {
     public class Repository : IRepository
     {
-        private CarDatabase _carDatabase;
+        private ICarData _carDatabase;
 
-        public Repository(CarDatabase carDatabase)
+        public Repository(ICarData carDatabase)
         {
             _carDatabase = carDatabase;
         }

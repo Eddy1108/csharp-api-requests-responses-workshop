@@ -2,7 +2,7 @@
 
 namespace workshop.wwwapi.Data
 {
-    public class CarDatabase
+    public class MiniDatabase : ICarData
     {
         private static List<Car> _cars = new List<Car>()
         {
@@ -12,7 +12,7 @@ namespace workshop.wwwapi.Data
 
         };
 
-        public List<Car> GetCars()
+        public IEnumerable<Car> GetCars()
         {
             return _cars;
         }
