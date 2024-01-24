@@ -10,7 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IRepository, Repository>();
-builder.Services.AddSingleton<ICarData, VWDatabase>();
+builder.Services.AddSingleton<ICarData, MiniDatabase>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

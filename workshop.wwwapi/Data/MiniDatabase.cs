@@ -16,5 +16,31 @@ namespace workshop.wwwapi.Data
         {
             return _cars;
         }
+        public Car AddCar(Car car)
+        {
+            car.Id = _cars.Max(car => car.Id) + 1;
+            _cars.Add(car);
+            return car;
+        }
+
+        public Car UpdateCar(int id, CarPut car)
+        {
+            var target = _cars.FirstOrDefault(car => car.Id == id);
+            target.Make = car.Make;
+            target.Model = car.Model;
+            return target;
+        }
+
+        public bool GetCar(int id, out Car car)
+        {
+            car = _cars.FirstOrDefault(car => car.Id == id);
+            
+            if(car==null)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
