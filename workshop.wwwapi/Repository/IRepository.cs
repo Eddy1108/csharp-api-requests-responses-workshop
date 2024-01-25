@@ -7,5 +7,7 @@ namespace workshop.wwwapi.Repository
         IEnumerable<Car> GetCars();
         Car AddCar(Car car);
         Car UpdateCar(int id, CarPut carPut);
+        Car GetACar(int id);
+
     }
 }

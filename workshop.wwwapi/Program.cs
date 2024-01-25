@@ -1,3 +1,5 @@
+
+using Microsoft.EntityFrameworkCore;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Endpoints;
 using workshop.wwwapi.Repository;
@@ -8,9 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("CarDb"));
 builder.Services.AddScoped<IRepository, Repository>();
-builder.Services.AddSingleton<ICarData, MiniDatabase>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -2,5 +2,21 @@
 
 
 
-The my-spec.yaml file was an example from here:
-https://github.com/OAI/OpenAPI-Specification/tree/main/examples/v3.0
+ install-package microsoft.entityframeworkcore.inmemory
+
+ ```cs
+ public class CarContext : DbContext
+    {
+        public CarContext(DbContextOptions<CarContext> options) : base(options)
+        {
+            
+        }
+        public DbSet<Car> Cars { get; set; }
+    }
+
+ ```
+
+
+ ```
+ builder.Services.AddDbContext<CarContext>(opt => opt.UseInMemoryDatabase("CarDb"));
+ ```

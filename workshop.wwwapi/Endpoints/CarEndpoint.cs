@@ -14,6 +14,7 @@ namespace workshop.wwwapi.Endpoints
             carGroup.MapGet("/", GetCars);
             carGroup.MapPost("/", AddCar);
             carGroup.MapPut("/{id}", UpdateCar);
+            carGroup.MapGet("/{id}", GetACars);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -21,7 +22,11 @@ namespace workshop.wwwapi.Endpoints
         {
             return TypedResults.Ok(repository.GetCars());
         }
-
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetACars(IRepository repository, int id)
+        {
+            return TypedResults.Ok(repository.GetACar(id));
+        }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
         public static async Task<IResult> AddCar(IRepository repository, CarPost model)

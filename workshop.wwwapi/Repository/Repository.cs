@@ -1,37 +1,39 @@
-﻿using workshop.wwwapi.Data;
+﻿
+using workshop.wwwapi.Data;
 using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.Repository
 {
     public class Repository : IRepository
     {
-        private ICarData _carDatabase;
 
-        public Repository(ICarData carDatabase)
+        private DataContext _db;
+        public Repository(DataContext db)
         {
-            _carDatabase = carDatabase;
+           _db = db;
         }
         public Car UpdateCar(int id, CarPut carPut)
         {
-            var found = _carDatabase.GetCar(id, out Car car);
-            if (!found)
-            {
-                return null;
-            }
-
-            car.Make = carPut.Make;
-            car.Model = carPut.Model;
-            return car;
+            throw new NotImplementedException();
         }
 
         public Car AddCar(Car car)
         {
-            return _carDatabase.AddCar(car);
+            _db.Cars.Add(car);
+            _db.SaveChanges();
+            return car;
+
         }
 
         public IEnumerable<Car> GetCars()
         {
-            return _carDatabase.GetCars();
+            return _db.Cars.ToList();
+        }
+
+        public Car GetACar(int id)
+        {
+            var car = _db.Cars.FirstOrDefault(x => x.Id == id);
+            return car;
         }
     }
 }
