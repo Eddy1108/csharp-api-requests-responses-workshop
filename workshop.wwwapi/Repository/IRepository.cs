@@ -2,12 +2,13 @@
 
 namespace workshop.wwwapi.Repository
 {
-    public interface IRepository
+    public interface IRepository<T>
     {
-        IEnumerable<Car> GetCars();
-        Car AddCar(Car car);
-        Car UpdateCar(int id, CarPut carPut);
-        Car GetACar(int id);
-
+        T Insert(T entity);
+        IEnumerable<T> Get();
+        T Update(T entity);
+        T Delete(int id);
+        T GetById(object id);
+        void Save();
     }
 }

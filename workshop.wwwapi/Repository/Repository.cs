@@ -1,39 +1,70 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using workshop.wwwapi.Data;
 using workshop.wwwapi.Models;
 
 namespace workshop.wwwapi.Repository
 {
-    public class Repository : IRepository
+    /// <summary>
+    /// Generic Repository with some basic CRUD
+    /// </summary>
+    /// <typeparam name="T">The generic type with which to perform database operations on</typeparam>
+    public class Repository<T> : IRepository<T> where T : class
     {
-
         private DataContext _db;
-        public Repository(DataContext db)
+        private DbSet<T> _table = null;
+
+        public Repository(DataContext dataContext)
         {
-           _db = db;
-        }
-        public Car UpdateCar(int id, CarPut carPut)
-        {
-            throw new NotImplementedException();
+            _db = dataContext;
+            _table = _db.Set<T>();
         }
 
-        public Car AddCar(Car car)
+        public T Delete(int id)
         {
-            _db.Cars.Add(car);
+            T entity = _table.Find(id);
+            _table.Remove(entity);
             _db.SaveChanges();
-            return car;
+            return entity;
 
         }
 
-        public IEnumerable<Car> GetCars()
+        public IEnumerable<T> Get()
         {
-            return _db.Cars.ToList();
+            return _table.ToList();
         }
 
-        public Car GetACar(int id)
+        public T Insert(T entity)
         {
-            var car = _db.Cars.FirstOrDefault(x => x.Id == id);
-            return car;
+            _table.Add(entity);
+            _db.SaveChanges();
+            return entity;
+        }
+
+        public T Update(T entity)
+        {
+            _table.Attach(entity);
+            _db.Entry(entity).State = EntityState.Modified;
+            _db.SaveChanges();
+            return entity;
+        }
+
+        public T Delete(object id)
+        {
+            T entity = _table.Find(id);
+            _table.Remove(entity);
+            _db.SaveChanges();
+            return entity;
+        }
+
+        public T GetById(object id)
+        {
+            return _table.Find(id);
+        }
+
+        public void Save()
+        {
+            _db.SaveChanges();
         }
     }
 }

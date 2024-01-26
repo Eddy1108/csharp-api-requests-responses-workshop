@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
-using workshop.wwwapi.Models;
+using workshop.wwwapi.Models.Cars;
 using workshop.wwwapi.Repository;
 
 namespace workshop.wwwapi.Endpoints
@@ -12,39 +12,83 @@ namespace workshop.wwwapi.Endpoints
             var carGroup = app.MapGroup("cars");
 
             carGroup.MapGet("/", GetCars);
-            carGroup.MapPost("/", AddCar);
+            carGroup.MapPost("/", AddCar).AddEndpointFilter(async (invocationContext, next) =>
+            {
+                var car = invocationContext.GetArgument<CarPost>(1);
+
+                if (string.IsNullOrEmpty(car.Make) || string.IsNullOrEmpty(car.Model))
+                {
+                    return Results.BadRequest("You must enter a Make AND Model");
+                }
+                return await next(invocationContext);
+            }); ;
             carGroup.MapPut("/{id}", UpdateCar);
             carGroup.MapGet("/{id}", GetACars);
-        }
-
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetCars(IRepository repository)
-        {
-            return TypedResults.Ok(repository.GetCars());
+            carGroup.MapDelete("/{id}", DeleteCar);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetACars(IRepository repository, int id)
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public static async Task<IResult> DeleteCar(IRepository<Car> repository, int id)
         {
-            return TypedResults.Ok(repository.GetACar(id));
+            if (!repository.Get().Any(x => x.Id == id))
+            {
+                return TypedResults.NotFound("Car not found.");
+            }
+            var result = repository.Delete(id);
+            return result != null ? TypedResults.Ok(result) : Results.NotFound();
+        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetCars(IRepository<Car> repository)
+        {
+            return TypedResults.Ok(repository.Get());
+        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public static async Task<IResult> GetACars(IRepository<Car> repository, int id)
+        {
+            return TypedResults.Ok(repository.GetById(id));
         }
 
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public static async Task<IResult> AddCar(IRepository repository, CarPost model)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public static async Task<IResult> AddCar(IRepository<Car> repository, CarPost model)
         {
-            //validate
-            if(model == null)
+            if (repository.Get().Any(x => x.Model.Equals(model.Model, StringComparison.OrdinalIgnoreCase)))
             {
-                
+                return Results.BadRequest("Product with provided name already exists");
             }
-            var newCar = new Car() { Make=model.Make, Model=model.Model};
-            repository.AddCar(newCar);
-            return TypedResults.Created($"/{newCar.Id}", newCar);
+            
+            var entity = new Car() { Make=model.Make, Model=model.Model};
+            repository.Insert(entity);
+            return TypedResults.Created($"/{entity.Id}", entity);
+         
         }
-        
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> UpdateCar(IRepository repository, int id, CarPut model)
+
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+
+        public static async Task<IResult> UpdateCar(IRepository<Car> repository, int id, CarPut model)
         {
-            return TypedResults.Ok(repository.UpdateCar(id, model));
+            if (!repository.Get().Any(x => x.Id == id))
+            {
+                return TypedResults.NotFound("Product not found.");
+            }
+            var entity = repository.GetById(id);
+
+            if (model.Model != null)
+            {
+                if (repository.Get().Any(x => x.Model == model.Model))
+                {
+                    return Results.BadRequest("Product with provided name already exists");
+                }
+            }
+            entity.Make = model.Make != null ? model.Make : entity.Make;
+            entity.Model = model.Model != null ? model.Model : entity.Model;
+            
+            repository.Update(entity);
+
+            return TypedResults.Created($"/{entity.Id}", entity);
+
         }
 
     }

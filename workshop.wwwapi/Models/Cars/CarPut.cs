@@ -1,4 +1,4 @@
-﻿namespace workshop.wwwapi.Models
+﻿namespace workshop.wwwapi.Models.Cars
 {
     public class CarPut
     {
