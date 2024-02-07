@@ -20,7 +20,7 @@ namespace workshop.wwwapi.Repository
             _table = _db.Set<T>();
         }
 
-        public T Delete(int id)
+        public async Task<T> Delete(int id)
         {
             T entity = _table.Find(id);
             _table.Remove(entity);
@@ -29,19 +29,19 @@ namespace workshop.wwwapi.Repository
 
         }
 
-        public IEnumerable<T> Get()
+        public async Task<IEnumerable<T>> Get()
         {
-            return _table.ToList();
+            return await _table.ToListAsync();
         }
 
-        public T Insert(T entity)
+        public async Task<T> Insert(T entity)
         {
-            _table.Add(entity);
-            _db.SaveChanges();
+            await _table.AddAsync(entity);
+            await _db.SaveChangesAsync();
             return entity;
         }
 
-        public T Update(T entity)
+        public async Task<T> Update(T entity)
         {
             _table.Attach(entity);
             _db.Entry(entity).State = EntityState.Modified;
@@ -49,7 +49,7 @@ namespace workshop.wwwapi.Repository
             return entity;
         }
 
-        public T Delete(object id)
+        public async Task<T> Delete(object id)
         {
             T entity = _table.Find(id);
             _table.Remove(entity);
@@ -57,14 +57,14 @@ namespace workshop.wwwapi.Repository
             return entity;
         }
 
-        public T GetById(object id)
+        public async Task<T> GetById(object id)
         {
             return _table.Find(id);
         }
 
-        public void Save()
+        public async void Save()
         {
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
         }
     }
 }

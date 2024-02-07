@@ -7,10 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "workshop.wwwapi", "workshop
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AB5037CF-9B85-4586-960B-AAE4B936D531}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "workshop.console", "workshop.console\workshop.console.csproj", "{60FC293D-6EEC-4E11-98EE-0EF075AE43ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "workshop.console", "workshop.console\workshop.console.csproj", "{60FC293D-6EEC-4E11-98EE-0EF075AE43ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

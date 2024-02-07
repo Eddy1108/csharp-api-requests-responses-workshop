@@ -13,8 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("CarDb"));
-builder.Services.AddScoped<IRepository<Motorbike>, Repository<Motorbike>>();
-builder.Services.AddScoped<IRepository<Car>, Repository<Car>>();
+builder.Services.AddScoped<IRepository<Motorbike>,Repository<Motorbike>>();
+builder.Services.AddScoped<IRepository<Car>,Repository<Car>>();
 
 var app = builder.Build();
 
@@ -29,7 +29,7 @@ app.UseHttpsRedirection();
 
 app.ConfigureCarEndpoint();
 app.ConfigureMotorbikeEndpoint();
-
+app.ConfigureBoth();
 string ColorName(string color) => $"Color specified: {color}!";
 
 app.MapGet("/colorSelector/{color}", ColorName)

@@ -1,5 +1,8 @@
 # C# API Request Responses & Open API
 
+dotnet new sln --name workshop
+dotnet new webapi --name workshop.wwwapi
+dotnet sln add **/*.csproj
 
 
  install-package microsoft.entityframeworkcore.inmemory

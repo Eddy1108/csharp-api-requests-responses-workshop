@@ -4,11 +4,11 @@ namespace workshop.wwwapi.Repository
 {
     public interface IRepository<T>
     {
-        T Insert(T entity);
-        IEnumerable<T> Get();
-        T Update(T entity);
-        T Delete(int id);
-        T GetById(object id);
+        Task<T> Insert(T entity);
+        Task<IEnumerable<T>> Get();
+        Task<T> Update(T entity);
+        Task<T> Delete(int id);
+        Task<T> GetById(object id);
         void Save();
     }
 }

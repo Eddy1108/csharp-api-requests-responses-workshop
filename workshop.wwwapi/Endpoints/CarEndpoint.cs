@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using workshop.wwwapi.Models.Cars;
+using workshop.wwwapi.Models.DTO;
 using workshop.wwwapi.Repository;
 
 namespace workshop.wwwapi.Endpoints
@@ -30,7 +31,8 @@ namespace workshop.wwwapi.Endpoints
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public static async Task<IResult> DeleteCar(IRepository<Car> repository, int id)
         {
-            if (!repository.Get().Any(x => x.Id == id))
+            var car = await repository.GetById(id);
+            if (car==null)
             {
                 return TypedResults.NotFound("Car not found.");
             }
@@ -40,7 +42,8 @@ namespace workshop.wwwapi.Endpoints
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetCars(IRepository<Car> repository)
         {
-            return TypedResults.Ok(repository.Get());
+            var results = await repository.Get();
+            return TypedResults.Ok(results);
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetACars(IRepository<Car> repository, int id)
@@ -52,7 +55,9 @@ namespace workshop.wwwapi.Endpoints
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public static async Task<IResult> AddCar(IRepository<Car> repository, CarPost model)
         {
-            if (repository.Get().Any(x => x.Model.Equals(model.Model, StringComparison.OrdinalIgnoreCase)))
+            var cars = await repository.Get();
+            
+            if (cars.Any(x => x.Model.Equals(model.Model, StringComparison.OrdinalIgnoreCase)))
             {
                 return Results.BadRequest("Product with provided name already exists");
             }
@@ -69,15 +74,17 @@ namespace workshop.wwwapi.Endpoints
 
         public static async Task<IResult> UpdateCar(IRepository<Car> repository, int id, CarPut model)
         {
-            if (!repository.Get().Any(x => x.Id == id))
+            var entity = await repository.GetById(id);
+            if (entity == null)
             {
                 return TypedResults.NotFound("Product not found.");
             }
-            var entity = repository.GetById(id);
+           
+            var cars = await repository.Get();
 
             if (model.Model != null)
             {
-                if (repository.Get().Any(x => x.Model == model.Model))
+                if (cars.Any(x => x.Model == model.Model))
                 {
                     return Results.BadRequest("Product with provided name already exists");
                 }
