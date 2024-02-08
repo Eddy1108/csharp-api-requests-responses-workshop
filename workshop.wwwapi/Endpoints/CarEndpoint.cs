@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using workshop.wwwapi.Models.Cars;
 using workshop.wwwapi.Models.DTO;
+using workshop.wwwapi.Models.Motorbikes;
 using workshop.wwwapi.Repository;
 
 namespace workshop.wwwapi.Endpoints
@@ -39,12 +40,32 @@ namespace workshop.wwwapi.Endpoints
             var result = repository.Delete(id);
             return result != null ? TypedResults.Ok(result) : Results.NotFound();
         }
+
+
+
+
+
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public static async Task<IResult> GetCars(IRepository<Car> repository)
+        public static async Task<IResult> GetCars(IRepository<Car> carRepository)
         {
-            var results = await repository.Get();
-            return TypedResults.Ok(results);
+            var results = await carRepository.Get();
+            Payload<IEnumerable<Car>> payload = new Payload<IEnumerable<Car>>();
+            payload.data = results;
+            return TypedResults.Ok(payload);
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetACars(IRepository<Car> repository, int id)
         {

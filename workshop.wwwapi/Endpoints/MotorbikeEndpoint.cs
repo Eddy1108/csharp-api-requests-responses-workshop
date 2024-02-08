@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using workshop.wwwapi.Models.DTO;
 using workshop.wwwapi.Models.Motorbikes;
 using workshop.wwwapi.Repository;
 
@@ -16,6 +17,7 @@ namespace workshop.wwwapi.Endpoints
         [ProducesResponseType(StatusCodes.Status200OK)]
         public static async Task<IResult> GetMotorbikes(IRepository<Motorbike> repository)
         {
+            O
             return TypedResults.Ok(repository.Get());
         }
         [ProducesResponseType(StatusCodes.Status200OK)]

@@ -45,7 +45,7 @@ namespace workshop.wwwapi.Repository
         {
             _table.Attach(entity);
             _db.Entry(entity).State = EntityState.Modified;
-            _db.SaveChanges();
+             await _db.SaveChangesAsync();
             return entity;
         }
 

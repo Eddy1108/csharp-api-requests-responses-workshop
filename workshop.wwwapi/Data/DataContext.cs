@@ -15,8 +15,8 @@ namespace workshop.wwwapi.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-          
-           
+            //modelBuilder.Entity<Car>().Navigation(x => x.Passengers).AutoInclude();
+            
             modelBuilder.Entity<Motorbike>().HasData(
                 new Motorbike { Id = 1, Make = "KTM", Model="390 Adventure" });
          
